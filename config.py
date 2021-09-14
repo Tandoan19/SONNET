@@ -13,9 +13,8 @@ class Config(object):
     def __init__(self, ):
 
         self.seed = 9
-        mode = 'hover'
         self.model_type = 'sonnet'
-        self.data_type = 'consep'
+        self.data_type = 'glysac'
 
         self.type_classification = True
         self.nr_types = 5
@@ -99,7 +98,7 @@ class Config(object):
         self.save_dir = '%s/%s' % (self.log_path, self.model_name) # log file destination
 
         #### Info for running inferencee
-        self.inf_auto_find_chkpt = True
+        self.inf_auto_find_chkpt = False
         # path to checkpoints will be used for inference, replace accordingly
         self.inf_model_path  = '/media/tandoan/data2/logs/logs_focalnet_gastric_3types_v2/v1.0/focalnet/02/model-43956.index'
 
