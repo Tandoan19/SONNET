@@ -14,7 +14,7 @@ class Config(object):
 
         self.seed = 9
         self.model_type = 'sonnet'
-        self.data_type = 'glysac'
+        self.data_type = 'consep'
 
         self.type_classification = True
         self.nr_types = 5
@@ -100,15 +100,15 @@ class Config(object):
         #### Info for running inferencee
         self.inf_auto_find_chkpt = False
         # path to checkpoints will be used for inference, replace accordingly
-        self.inf_model_path  = '/media/tandoan/data2/logs/logs_focalnet_gastric_3types_v2/v1.0/focalnet/02/model-43956.index'
+        self.inf_model_path  = '/media/tandoan/data2/logs/logs_focalnet_noguide_consep/v1.0/focalnet/02/model-39650.index'
 
         # output will have channel ordering as [Nuclei Type][Nuclei Pixels][Additional]
         # where [Nuclei Type] will be used for getting the type of each instance
         # while [Nuclei Pixels][Additional] will be used for extracting instance
 
-        self.inf_imgs_ext = '.jpg'
-        self.inf_data_dir = '/media/tandoan/data/COLON_PATCHES_1024/v2/wsi_00018'
-        self.inf_output_dir = 'output/COLON_wsi_00018_feat/'
+        self.inf_imgs_ext = '.png'
+        self.inf_data_dir = '/media/tandoan/data2/CoNSeP/Test/Images'
+        self.inf_output_dir = 'output/test/'
 
         # for inference during evalutaion mode i.e run by infer.py
         self.eval_inf_input_tensor_names = ['images']

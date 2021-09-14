@@ -60,15 +60,15 @@ def colorize(value, vmin=None, vmax=None, cmap=None):
     value = tf.cast(value * 255, tf.uint8)
     return value
 
-def proc_np_ord(pred, pred_ord, rgb=None):
+def proc_np_ord(pred, pred_ord):
     """
-    Process Nuclei Prediction with XY Coordinate Map
+    Process Nuclei Prediction with The ordinal map
 
     Args:
         pred: prediction output (NP branch) 
         pred_ord: ordinal prediction output (ordinal branch) 
     """
-
+    
     blb_raw = pred
 
     pred_ord = np.squeeze(pred_ord)

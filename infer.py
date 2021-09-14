@@ -70,7 +70,6 @@ class Inferer(Config):
                 to run the prediction upon before being assembled back            
         """    
         step_size = [40, 40]
-        # step_size = [76, 76]
         msk_size = self.infer_mask_shape
         win_size = self.infer_input_shape
 
@@ -103,7 +102,6 @@ class Inferer(Config):
 
         last_h, nr_step_h = get_last_steps(im_h_pad, step_size[0])
         last_w, nr_step_w = get_last_steps(im_w_pad, step_size[1])
-
         diff_h = win_size[0] - step_size[0]
         padt = diff_h // 2
         padb = last_h + win_size[0] - im_h_pad
@@ -125,7 +123,6 @@ class Inferer(Config):
                 win = x_pad[row:row+win_size[0], 
                         col:col+win_size[1]]
                 sub_patches.append(win)
-
         pred_coded = deque()
         pred_ord = deque()
         while len(sub_patches) > self.inf_batch_size:
@@ -149,12 +146,11 @@ class Inferer(Config):
 
         #### Assemble back into full image
         output_patch_shape = np.squeeze(pred_coded[0]).shape
-        ch = 1 if len(output_patch_shape) == 2 else output_patch_shape[0]
+        ch = 1 if len(output_patch_shape) == 2 else output_patch_shape[-1]
 
         #### Assemble back into full image
         pred_coded = np.squeeze(np.array(pred_coded))
         pred_coded = np.reshape(pred_coded, (nr_step_h, nr_step_w) + pred_coded.shape[1:])
-        pred_coded = np.transpose(pred_coded, [0, 1, 3, 4, 2])
 
         pred_coded = np.transpose(pred_coded, [0, 2, 1, 3, 4]) if ch != 1 else \
                         np.transpose(pred_coded, [0, 2, 1, 3])

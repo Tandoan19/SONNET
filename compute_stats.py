@@ -8,8 +8,10 @@ import numpy as np
 import scipy.io as sio
 import pandas as pd
 
-from config import Config
 from metrics.stats_utils import *
+from config import Config
+
+cfg = Config()
 
 def run_nuclei_type_stat(pred_dir, true_dir, type_uid_list=None, exhaustive=True):
     """
@@ -33,7 +35,6 @@ def run_nuclei_type_stat(pred_dir, true_dir, type_uid_list=None, exhaustive=True
                      for instance types
     """
     ###
-    # [Fd, acc_type, Fcm, Fci, Fce, Fcs]
     file_list = glob.glob(pred_dir + '*.mat')
     file_list.sort() # ensure same order [1]
     paired_all = [] # unique matched index pair
@@ -44,13 +45,10 @@ def run_nuclei_type_stat(pred_dir, true_dir, type_uid_list=None, exhaustive=True
     for file_idx, filename in enumerate(file_list[:]):
         filename = os.path.basename(filename)
         basename = filename.split('.')[0]
-
         true_info = sio.loadmat(true_dir + basename + '.mat')
         # dont squeeze, may be 1 instance exist
         true_centroid  = (true_info['inst_centroid']).astype('float32')
         true_inst_type = (true_info['inst_type']).astype('int32')
-        ##################
-        true_inst_type = np.transpose(true_inst_type, [1, 0])
 
         if true_centroid.shape[0] != 0:
             true_inst_type = true_inst_type[:,0]                
@@ -58,21 +56,18 @@ def run_nuclei_type_stat(pred_dir, true_dir, type_uid_list=None, exhaustive=True
             true_centroid = np.array([[0, 0]])
             true_inst_type = np.array([0])
 
-        cfg = Config()
+        # * for converting the GT type in CoNSeP and GLySAC
         if cfg.data_type == 'consep':
-            # * for converting the GT type in CoNSeP
             true_inst_type[(true_inst_type == 3) | (true_inst_type == 4)] = 3
             true_inst_type[(true_inst_type == 5) | (true_inst_type == 6) | (true_inst_type == 7)] = 4
         if cfg.data_type == 'glysac':
-            # * for converting the GT type in Gastric
-            true_inst_type[(true_inst_type == 1) | (true_inst_type == 2)] = 1
+            true_inst_type[(true_inst_type == 1) | (true_inst_type == 2) | (true_inst_type == 9) | (true_inst_type == 10)] = 1
             true_inst_type[(true_inst_type == 4) | (true_inst_type == 5) | (true_inst_type == 6) | (true_inst_type == 7)] = 2
             true_inst_type[(true_inst_type == 8) | (true_inst_type == 3)] = 3
-           
 
         pred_info = sio.loadmat(pred_dir + basename + '.mat')
         # dont squeeze, may be 1 instance exist
-        pred_centroid  = (pred_info['inst_centroid']).astype('float32') 
+        pred_centroid  = (pred_info['inst_centroid']).astype('float32')
         pred_inst_type = (pred_info['inst_type']).astype('int32')
 
         if pred_centroid.shape[0] != 0:
@@ -83,8 +78,7 @@ def run_nuclei_type_stat(pred_dir, true_dir, type_uid_list=None, exhaustive=True
 
         # ! if take longer than 1min for 1000 vs 1000 pairing, sthg is wrong with coord
         paired, unpaired_true, unpaired_pred = pair_coordinates(true_centroid, pred_centroid, 12)
-        
- 
+
         # * Aggreate information
         # get the offset as each index represent 1 independent instance
         true_idx_offset = true_idx_offset + true_inst_type_all[-1].shape[0] if file_idx != 0 else 0
@@ -121,12 +115,15 @@ def run_nuclei_type_stat(pred_dir, true_dir, type_uid_list=None, exhaustive=True
         paired_true = paired_true[type_samples]
         paired_pred = paired_pred[type_samples]
 
-
         tp_dt = ((paired_true == type_id) & (paired_pred == type_id)).sum()
         tn_dt = ((paired_true != type_id) & (paired_pred != type_id)).sum()
         fp_dt = ((paired_true != type_id) & (paired_pred == type_id)).sum()
         fn_dt = ((paired_true == type_id) & (paired_pred != type_id)).sum()
         
+        if not exhaustive:
+            ignore = (paired_true == -1).sum()
+            fp_dt -= ignore
+
         summary_1 = {}
         p_summ_1 = np.copy(paired_true)
         val, cnt = np.unique(p_summ_1[(paired_true != type_id) & (paired_pred == type_id)], return_counts=True)
@@ -139,13 +136,10 @@ def run_nuclei_type_stat(pred_dir, true_dir, type_uid_list=None, exhaustive=True
         for name, num in zip(val, cnt):
             summary[name] = summary.get(name, 0) + num
 
-
-        if not exhaustive:
-            ignore = (paired_true == -1).sum()
-            fp_dt -= ignore
-
         fp_d = (unpaired_pred == type_id).sum() 
         fn_d = (unpaired_true == type_id).sum() 
+
+        
         f1_type = (2 * (tp_dt + tn_dt)) / \
                     (2 * (tp_dt + tn_dt) + w[0] * fp_dt + w[1] * fn_dt \
                                          + w[2] *  fp_d + w[3] * fn_d)
@@ -172,6 +166,7 @@ def run_nuclei_type_stat(pred_dir, true_dir, type_uid_list=None, exhaustive=True
     
     if type_uid_list is None:
         type_uid_list = np.unique(true_inst_type_all).tolist()
+    
 
     results_list = [f1_d, acc_type]
     for type_uid in type_uid_list:
@@ -204,7 +199,6 @@ def run_nuclei_inst_stat(pred_dir, true_dir, print_img_stats=False, ext='.mat'):
         pred = remap_label(pred, by_size=False)
         true = remap_label(true, by_size=False)
 
-        # [DICE, DQ, SQ, PQ, AJI_Plus, AJI]
         pq_info = get_fast_pq(true, pred, match_iou=0.5)[0]
         metrics[0].append(get_dice_1(true, pred))
         metrics[1].append(pq_info[0]) # dq

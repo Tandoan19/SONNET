@@ -55,22 +55,8 @@ for filename in file_list:
         pred_inst = np.squeeze(pred_inst)
         pred_type = np.argmax(pred_type, axis=-1)
         ###
-        pred_type_nuc = np.copy(pred_type)
-        pred_type_nuc[pred_type_nuc>0] = 1
-        pred_ord_nuc = np.copy(pred_ord)
-        pred_ord_nuc[pred_ord_nuc>0] = 1
-        pred_inst_nuc = np.copy(pred_inst)
-        pred_inst_nuc[pred_inst_nuc>0] = 1
-        pred_nuc_diff_0 = pred_inst_nuc - pred_type_nuc
-        pred_nuc_diff_0[pred_nuc_diff_0!=0] = 1
-        pred_inst[pred_nuc_diff_0==1] = 0
-        pred_inst_nuc[pred_nuc_diff_0==1] = 0
-        pred_nuc_diff_1 = pred_inst_nuc - pred_ord_nuc
-        pred_nuc_diff_1[pred_nuc_diff_1!=0] = 1
-        pred_inst[pred_nuc_diff_1==1] = 0
-        ###
-
-    pred_inst = postproc.hover.proc_np_ord(pred_inst, pred_ord)
+ 
+    pred_inst = postproc.post_sonnet.proc_np_ord(pred_inst, pred_ord)
 
     # ! will be extremely slow on WSI/TMA so it's advisable to comment this out
     # * remap once so that further processing faster (metrics calculation, etc.)
