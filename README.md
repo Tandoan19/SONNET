@@ -65,10 +65,10 @@ To calculate the metrics used in SONNET paper, run the command:
 <table border="0">
 <tr>
     <td>
-    <img src="results/result_1.png", width="50%" />
+    <img src="results/result_1.png", width="100%" />
     </td> 
     <td>
-    <img src="results/results_2.png", width="40%" /> 
+    <img src="results/results_2.png", width="100%" /> 
     </td>
 </tr>
 </table>
