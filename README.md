@@ -22,3 +22,12 @@ pip install -r requirements.txt
 ## Dataset
 Download the CoNSeP dataset from this [link](https://warwick.ac.uk/fac/sci/dcs/research/tia/data/hovernet/). <br />
 Download the PanNuke dataset from this [link](https://warwick.ac.uk/fac/cross_fac/tia/data/pannuke) <br />
+Download the MoNuSAC and GLySAC from this [link](https://drive.google.com/drive/folders/1p0Yt2w8MTcaZJU3bdh0fAtTrPWin1-zb?usp=sharing) <br />
+If you use any of these datasets for your research, please citing its corresponding paper.
+
+## Step by Step Instruction
+To help with debugging and applying the model for nuclei segmentation and classification, it requires three steps:
+
+### Step 1: Extracting the original data into patches
+To train the model, the data needs to be extracted into patches. To do this, simply run:
+``` python extract_patches.py```
