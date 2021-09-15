@@ -26,7 +26,7 @@ Download the MoNuSAC and GLySAC from this [link](https://drive.google.com/drive/
 If you use any of these datasets for your research, please citing its corresponding paper.
 
 ## Step by Step Instruction
-To help with debugging and applying the model for nuclei segmentation and classification, it requires three steps:
+To help with debugging and applying the model for nuclei segmentation and classification, it requires four steps:
 
 ### Step 1: Extracting the original data into patches
 To train the model, the data needs to be extracted into patches. First, set the dataset name in ```config.py```. Then, To extract data into patches for training, simply run: <br />
