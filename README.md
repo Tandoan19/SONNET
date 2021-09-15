@@ -72,10 +72,11 @@ To calculate the metrics used in SONNET paper, run the command:
     </td>
 </tr>
 </table>
-Type of each nuclear is represented by the color:
-- Pink for Epithelial.
-- Yellow for Lymphocyte.
-- Blue for Miscellaneous.
+
+Type of each nuclear is represented by the color: <br />
+- Pink for Epithelial. <br />
+- Yellow for Lymphocyte. <br />
+- Blue for Miscellaneous. <br />
 
 ## Requirements
 Python 3.6, Tensorflow 1.12 and other common packages listed in requirements.txt
