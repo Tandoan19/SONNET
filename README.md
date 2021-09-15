@@ -31,7 +31,7 @@ To help with debugging and applying the model for nuclei segmentation and classi
 ### Step 1: Extracting the original data into patches
 To train the model, the data needs to be extracted into patches. First, set the dataset name in ```config.py```. Then, To extract data into patches for training, simply run: <br />
 `python extract_patches.py` <br />
-The patches are numpy arrays with the shape of [RGB, inst, type], where RGB is the input image, inst is the forground/background groundtruth, type is the type groundtruth map. 
+The patches are numpy arrays with the shape of [RGB, inst, type], where RGB is the input image, inst is the foreground/background groundtruth, type is the type groundtruth map. 
 
 ### Step 2: Training the model
 Download the pretrained-weights of the encoder used in SONNET on this [link](https://drive.google.com/drive/folders/1p0Yt2w8MTcaZJU3bdh0fAtTrPWin1-zb?usp=sharing) <br />
