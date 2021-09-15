@@ -40,7 +40,7 @@ Before training the network:
 - Set the pretrained-weights of the encoder in `config.py`.
 - Set the log path in `config.py`.
 - Change the hyperparameters used in training process according to your need in `opt/hyperconfig.py`. <br />
-To train the network with GPUs 0 and 1: <br />
+To train the network with GPUs 0 and 1:
 ```
 python train.py --gpu='0,1'
 ```
