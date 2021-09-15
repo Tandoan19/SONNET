@@ -29,5 +29,54 @@ If you use any of these datasets for your research, please citing its correspond
 To help with debugging and applying the model for nuclei segmentation and classification, it requires three steps:
 
 ### Step 1: Extracting the original data into patches
-To train the model, the data needs to be extracted into patches. To do this, simply run:
-``` python extract_patches.py```
+To train the model, the data needs to be extracted into patches. First, set the dataset name in ```config.py```. Then, To extract data into patches for training, simply run: <br />
+`python extract_patches.py` <br />
+The patches are numpy arrays with the shape of [RGB, inst, type], where RGB is the input image, inst is the forground/background groundtruth, type is the type groundtruth map. 
+
+### Step 2: Training the model
+Download the pretrained-weights of the encoder used in SONNET on this [link](https://drive.google.com/drive/folders/1p0Yt2w8MTcaZJU3bdh0fAtTrPWin1-zb?usp=sharing) <br />
+Before training the network:
+- Set the training dataset and validation dataset path in `config.py`.
+- Set the pretrained-weights of the encoder in `config.py`.
+- Set the log path in `config.py`.
+- Change the hyperparameters used in training process according to your need in `opt/hyperconfig.py`.
+To train the network with GPUs 0 and 1: <br />
+```
+python train.py --gpu='0,1'
+```
+### Step 3: Inference
+Before testing the network on the test dataset:
+- Set path to the test dataset, path to the model trained weights, path to save the output in `config.py`.
+Achieve the network prediction by the command: 
+```
+python infer.py --gpu='0'
+```
+It is notice that the inference only support for 1 GPU only. <br />
+To obtain the final outcome, i.e. the instance map and the type of each nuclear, run the command:
+```
+python process.py
+```
+### Step 4: Calculate the metrics
+To calculate the metrics used in SONNET paper, run the command:
+- instance segmentation: `python compute_stats.py --mode=instance --pred_dir='pred_dir' --true_dir='true_dir'`
+- type classification: `python compute_stats.py --mode=type --pred_dir='pred_dir' --true_dir='true_dir'`
+
+## Visual Results
+<table border="0">
+<tr>
+    <td>
+    <img src="results/result_1.tif" width="100%" />
+    </td> 
+    <td>
+    <img src="results/results_2.tif", width="100%" /> 
+    </td>
+</tr>
+</table>
+Type of each nuclear is represented by the color:
+- Pink for Epithelial.
+- Yellow for Lymphocyte.
+- Blue for Miscellaneous.
+
+## Requirements
+Python 3.6, Tensorflow 1.12 and other common packages listed in requirements.txt
+
