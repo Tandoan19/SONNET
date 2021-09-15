@@ -84,6 +84,6 @@ Python 3.6, Tensorflow 1.12 and other common packages listed in requirements.txt
 ## Citation
 The datasets that we used in SONNET are from these papers:
 - CoNSeP: [paper](https://www.sciencedirect.com/science/article/pii/S1361841519301045).
-- MoNuSAC: [paper](https://ieeexplore.ieee.org/document/9446924)
-- PanNuke: [paper](https://arxiv.org/abs/2003.10778)
+- MoNuSAC: [paper](https://ieeexplore.ieee.org/document/9446924).
+- PanNuke: [paper](https://arxiv.org/abs/2003.10778).
 
