@@ -73,7 +73,7 @@ To calculate the metrics used in SONNET paper, run the command:
 </tr>
 </table>
 
-Type of each nuclear is represented by the color: <br />
+Type of each nucleus is represented by the color: <br />
 - Pink for Epithelial. <br />
 - Yellow for Lymphocyte. <br />
 - Blue for Miscellaneous. <br />
